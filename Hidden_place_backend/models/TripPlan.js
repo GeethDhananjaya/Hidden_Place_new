@@ -1,3 +1,4 @@
+// Feature: Trip Planner and Wishlist
 const mongoose = require('mongoose');
 
 const TripPlanSchema = new mongoose.Schema({
