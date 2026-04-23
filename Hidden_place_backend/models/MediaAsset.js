@@ -1,3 +1,4 @@
+// Feature: Media Gallery and System Infrastructure
 const mongoose = require('mongoose');
 
 const MediaAssetSchema = new mongoose.Schema({

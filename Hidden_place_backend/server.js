@@ -1,4 +1,5 @@
 require('dotenv').config();
+// Feature: Media Gallery and System Infrastructure
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
