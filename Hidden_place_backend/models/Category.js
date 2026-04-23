@@ -1,3 +1,4 @@
+// Feature: Travel Categories and Environmental Tags
 const mongoose = require('mongoose');
 
 const CategorySchema = new mongoose.Schema({
