@@ -1,3 +1,4 @@
+// Feature: Travel Guide Management
 const mongoose = require('mongoose');
 
 const GuideSchema = new mongoose.Schema({
