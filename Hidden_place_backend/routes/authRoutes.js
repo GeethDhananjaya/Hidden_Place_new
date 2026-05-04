@@ -317,36 +317,32 @@ router.put('/admin/guides-approve/:id', protect, async (req, res) => {
 
     // Send email to guide... (using 'user' variable now instead of 'guide')
 
-    try {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL_USER?.trim(),
-          pass: process.env.EMAIL_PASS?.replace(/\s+/g, ''),
-        }
-      });
+    // Send email to guide asynchronously
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER?.trim(),
+        pass: process.env.EMAIL_PASS?.replace(/\s+/g, ''),
+      }
+    });
 
-      const mailOptions = {
-        from: `"Hidden Gems SL" <${process.env.EMAIL_USER?.trim()}>`,
-        to: user.email,
-        subject: 'Welcome to the Team! Your Guide Profile is Approved 🛡',
-        html: `
-          <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-            <h2>Congratulations ${user.name}!</h2>
-            <p>Your local guide profile for <b>Hidden Gems SL</b> has been officially approved by our admin team.</p>
-            <p>You can now log in to the app and start sharing your secret discoveries and guiding travellers on their journey.</p>
-            <p style="margin-top: 30px;">Happy Exploring,<br/>The Hidden Gems Team</p>
-          </div>
-        `,
-      };
+    const mailOptions = {
+      from: `"Hidden Gems SL" <${process.env.EMAIL_USER?.trim()}>`,
+      to: user.email,
+      subject: 'Welcome to the Team! Your Guide Profile is Approved 🛡',
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+          <h2>Congratulations ${user.name}!</h2>
+          <p>Your local guide profile for <b>Hidden Gems SL</b> has been officially approved by our admin team.</p>
+          <p>You can now log in to the app and start sharing your secret discoveries and guiding travellers on their journey.</p>
+          <p style="margin-top: 30px;">Happy Exploring,<br/>The Hidden Gems Team</p>
+        </div>
+      `,
+    };
 
-      await transporter.sendMail(mailOptions);
-      res.status(200).json({ message: 'Guide approved and email notification sent!', user });
-    } catch (emailError) {
-      console.error('Email Notification Error:', emailError);
-      // Still return 200 because the database WAS updated!
-      res.status(200).json({ message: 'Guide approved, but email notification failed to send.', user });
-    }
+    transporter.sendMail(mailOptions).catch(err => console.error('Email Notification Error:', err));
+    
+    res.status(200).json({ message: 'Guide approved successfully!', user });
   } catch (error) {
     console.error('Approval Error:', error);
     res.status(500).json({ message: 'Approval process failed' });
